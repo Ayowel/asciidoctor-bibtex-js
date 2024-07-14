@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    /* JavaScript Support */
+    "allowJs": true,
+    /* Emit */
+    "declaration": true,
+    "outDir": "target/",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*.ts"]
+}
