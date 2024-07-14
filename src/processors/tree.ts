@@ -77,6 +77,7 @@ function citationUpdater(this: Extensions.TreeProcessorDsl) {
         return (
           ["list_item", "table_cell", "ulist"].includes(b.getContext()) ||
           (b.getContentModel && b.getContentModel() === "simple") ||
+          (!b.getContentModel && (b as Block).getSourceLines) ||
           !!b.getTitle()
         );
       },
@@ -112,7 +113,10 @@ function citationUpdater(this: Extensions.TreeProcessorDsl) {
         if (block.getTitle() === bibliographyMacroPlaceholder) {
           bibliography_blocks.push(block as List);
         }
-      } else if (block.getContentModel && block.getContentModel() == "simple") {
+      } else if (
+        (block.getContentModel && block.getContentModel() == "simple") ||
+        (!block.getContentModel && (block as Block).getSourceLines)
+      ) {
         for (const line of (block as Block).getSourceLines()) {
           if (processor.search_and_flag_inline_macros(line)) {
             macro_blocks.push(block);
@@ -138,7 +142,10 @@ function citationUpdater(this: Extensions.TreeProcessorDsl) {
         // ghost footnotes will be inserted (as of asciidoctor 2.0.10).
         const block_repr = block as unknown as { text: string };
         block_repr.text = processor.process_inline_macros(block_repr.text);
-      } else if (block.getContentModel && block.getContentModel() == "simple") {
+      } else if (
+        (block.getContentModel && block.getContentModel() == "simple") ||
+        (!block.getContentModel && (block as Block).getSourceLines)
+      ) {
         const block_repr = block as Block;
         const lines = block_repr.getSourceLines();
         // Directly update the lines array as there is no way to update them via the API
